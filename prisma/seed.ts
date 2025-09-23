@@ -58,10 +58,12 @@ const questions = [
 async function main() {
   console.log('🌱 Iniciando seed do banco de dados...')
 
-  // Limpar perguntas existentes
-  await prisma.questionResponse.deleteMany()
-  await prisma.surveyResponse.deleteMany()
-  await prisma.question.deleteMany()
+  // Verificar se já existem perguntas
+  const existingCount = await prisma.question.count()
+  if (existingCount > 0) {
+    console.log(`ℹ️  Banco já possui ${existingCount} perguntas. Seed não necessário.`)
+    return
+  }
 
   // Criar perguntas
   for (const question of questions) {
