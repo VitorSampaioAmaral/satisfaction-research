@@ -1,36 +1,169 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Dashboard de Relatórios - Pesquisa de Ambiente Corporativo
 
-## Getting Started
+Dashboard profissional para análise e visualização de dados de pesquisas de ambiente corporativo, desenvolvido com Next.js, TypeScript, Tailwind CSS e Prisma.
 
-First, run the development server:
+## 🔐 Acesso
 
+**Chave de Acesso**: `DASH2024CORP123456789`
+
+## 🚀 Funcionalidades
+
+### 📊 **Gráficos e Visualizações**
+- **Gráfico de Pizza**: Distribuição de pontuações (Excelente, Bom, Regular, Ruim)
+- **Linha do Tempo**: Respostas por mês com tendências
+- **Gráfico de Barras**: Análise por categoria de pergunta
+- **Cards de Estatísticas**: Métricas principais em tempo real
+
+### 📈 **Métricas Disponíveis**
+- Total de respostas
+- Usuários únicos
+- Pontuação média geral
+- Taxa de satisfação
+- Análise por categoria
+- Respostas recentes
+
+### 🎨 **Interface**
+- **Tema Escuro**: Design moderno e profissional
+- **Responsivo**: Funciona em desktop, tablet e mobile
+- **Interativo**: Gráficos com tooltips e legendas
+- **Atualização em Tempo Real**: Botão para refresh dos dados
+
+## 🛠️ Tecnologias
+
+- **Next.js 15** - Framework React
+- **TypeScript** - Tipagem estática
+- **Tailwind CSS** - Estilização
+- **Prisma** - ORM para banco de dados
+- **Recharts** - Biblioteca de gráficos
+- **Lucide React** - Ícones
+
+## 📊 Estrutura do Dashboard
+
+### Cards de Estatísticas
+- **Total de Respostas**: Número total de pesquisas respondidas
+- **Usuários Únicos**: Quantidade de colaboradores que participaram
+- **Pontuação Média**: Média geral das pontuações (0-30)
+- **Taxa de Satisfação**: Percentual de satisfação baseado na média
+
+### Gráfico de Pizza
+Distribui as respostas em 4 categorias:
+- **Excelente (25-30 pontos)**: Verde
+- **Bom (20-24 pontos)**: Azul
+- **Regular (15-19 pontos)**: Amarelo
+- **Ruim (0-14 pontos)**: Vermelho
+
+### Linha do Tempo
+Mostra a evolução das respostas ao longo do tempo:
+- **Eixo X**: Meses/anos
+- **Linha Azul**: Número de respostas por mês
+- **Linha Verde**: Pontuação média por mês
+
+### Gráfico de Barras
+Análise detalhada por categoria de pergunta:
+- **Reconhecimento**: Valorização no trabalho
+- **Ambiente**: Colaboração e positividade
+- **Crescimento**: Oportunidades de desenvolvimento
+- **Comunicação**: Eficácia entre equipes
+- **Propósito**: Sentido do trabalho
+- **Equilíbrio**: Vida pessoal/profissional
+- **Feedback**: Recebimento de feedback
+- **Liderança**: Inspiração da liderança
+- **Autonomia**: Liberdade nas tarefas
+- **Recomendação**: Intenção de recomendar
+
+### Respostas Recentes
+Lista das últimas 10 respostas com:
+- Nome e email do colaborador
+- Pontuação total e classificação
+- Data de conclusão
+
+## 🚀 Como Executar
+
+1. **Instalar dependências**:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. **Executar em modo desenvolvimento**:
+```bash
+npm run dev
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. **Acessar o dashboard**:
+```
+http://localhost:3001
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. **Fazer login** com a chave: `DASH2024CORP123456789`
 
-## Learn More
+## 📱 Páginas
 
-To learn more about Next.js, take a look at the following resources:
+- **`/`** - Redirecionamento automático
+- **`/login`** - Página de autenticação
+- **`/dashboard`** - Painel principal com gráficos
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🔧 Comandos Úteis
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+# Desenvolvimento
+npm run dev
 
-## Deploy on Vercel
+# Build para produção
+npm run build
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# Executar em produção
+npm start
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# Gerar cliente Prisma
+npm run db:generate
+
+# Abrir Prisma Studio
+npm run db:studio
+```
+
+## 🗄️ Banco de Dados
+
+O dashboard conecta ao mesmo banco SQLite do sistema principal:
+- **Localização**: `../prisma/dev.db`
+- **Tabelas**: User, Question, SurveyResponse, QuestionResponse
+- **Relacionamentos**: Configurados para análise completa
+
+## 🎯 Casos de Uso
+
+### Para Gestores
+- Monitorar satisfação dos colaboradores
+- Identificar tendências ao longo do tempo
+- Analisar pontos fortes e fracos por categoria
+- Acompanhar evolução da empresa
+
+### Para RH
+- Avaliar efetividade de políticas
+- Identificar áreas de melhoria
+- Planejar ações de engajamento
+- Medir impacto de mudanças
+
+### Para Liderança
+- Tomar decisões baseadas em dados
+- Comunicar resultados para stakeholders
+- Estabelecer metas de melhoria
+- Celebrar conquistas
+
+## 🔒 Segurança
+
+- **Autenticação por chave**: Acesso controlado
+- **Dados anônimos**: Preserva privacidade dos colaboradores
+- **Validação**: Todas as entradas são validadas
+- **HTTPS**: Recomendado para produção
+
+## 📈 Próximas Funcionalidades
+
+- [ ] Exportação de relatórios em PDF
+- [ ] Filtros por período
+- [ ] Comparação entre departamentos
+- [ ] Alertas automáticos
+- [ ] Dashboard em tempo real
+- [ ] Análise de sentimentos
+
+---
+
+**Desenvolvido para análise profissional de pesquisas de ambiente corporativo** 🏢📊

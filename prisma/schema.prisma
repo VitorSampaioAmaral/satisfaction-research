@@ -1,0 +1,70 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:../prisma/dev.db"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relacionamento: Um usuário pode ter múltiplas respostas
+  responses SurveyResponse[]
+
+  @@map("users")
+}
+
+model Question {
+  id       Int    @id @default(autoincrement())
+  text     String
+  category String
+  order    Int    @unique // Para manter a ordem das perguntas
+
+  // Relacionamento: Uma pergunta pode ter múltiplas respostas
+  responses QuestionResponse[]
+
+  @@map("questions")
+}
+
+model SurveyResponse {
+  id          String   @id @default(cuid())
+  userId      String
+  totalScore  Int
+  completedAt DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relacionamento: Uma resposta de pesquisa pertence a um usuário
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Relacionamento: Uma resposta de pesquisa tem múltiplas respostas de perguntas
+  questionResponses QuestionResponse[]
+
+  @@map("survey_responses")
+}
+
+model QuestionResponse {
+  id               String @id @default(cuid())
+  surveyResponseId String
+  questionId       Int
+  score            Int    // 0, 1, 2, ou 3
+
+  // Relacionamento: Uma resposta de pergunta pertence a uma resposta de pesquisa
+  surveyResponse SurveyResponse @relation(fields: [surveyResponseId], references: [id], onDelete: Cascade)
+
+  // Relacionamento: Uma resposta de pergunta pertence a uma pergunta
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  // Garantir que cada pergunta só pode ser respondida uma vez por pesquisa
+  @@unique([surveyResponseId, questionId])
+  @@map("question_responses")
+}
