@@ -123,10 +123,30 @@ npm run db:studio
 
 ## 🗄️ Banco de Dados
 
-O dashboard conecta ao mesmo banco SQLite do sistema principal:
-- **Localização**: `../prisma/dev.db`
-- **Tabelas**: User, Question, SurveyResponse, QuestionResponse
-- **Relacionamentos**: Configurados para análise completa
+Agora ambos os apps usam PostgreSQL.
+
+Defina as variáveis de ambiente (Windows PowerShell):
+
+```bash
+# Projeto raiz
+setx DATABASE_URL "postgresql://usuario:senha@localhost:5432/research_root?schema=public"
+
+# Projeto cliente
+setx CLIENTE_DATABASE_URL "postgresql://usuario:senha@localhost:5432/research_cliente?schema=public"
+```
+
+Aplique as migrações e gere o client:
+
+```bash
+# raiz
+npx prisma migrate deploy --schema=prisma/schema.prisma
+npx prisma generate --schema=prisma/schema.prisma
+
+# cliente
+cd cliente
+npx prisma migrate deploy --schema=prisma/schema.prisma
+npx prisma generate --schema=prisma/schema.prisma
+```
 
 ## 🎯 Casos de Uso
 
