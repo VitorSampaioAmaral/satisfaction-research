@@ -18,7 +18,8 @@ model User {
   updatedAt DateTime @updatedAt
 
   // Relacionamento: Um usuário pode ter múltiplas respostas
-  responses SurveyResponse[]
+  responses       SurveyResponse[]
+  customResponses CustomSurveyResponse[]
 
   @@map("users")
 }
@@ -56,7 +57,7 @@ model QuestionResponse {
   id               String @id @default(cuid())
   surveyResponseId String
   questionId       Int
-  score            Int    // 0, 1, 2, ou 3
+  score            Int // 0, 1, 2, ou 3
 
   // Relacionamento: Uma resposta de pergunta pertence a uma resposta de pesquisa
   surveyResponse SurveyResponse @relation(fields: [surveyResponseId], references: [id], onDelete: Cascade)
@@ -67,4 +68,94 @@ model QuestionResponse {
   // Garantir que cada pergunta só pode ser respondida uma vez por pesquisa
   @@unique([surveyResponseId, questionId])
   @@map("question_responses")
+}
+
+// Modelo para configurações customizadas de pesquisa
+model SurveyConfig {
+  id          String  @id @default(cuid()) // ID criptografado customizado
+  customId    String  @unique // ID customizado fornecido pelo usuário (criptografado)
+  name        String // Nome da configuração
+  description String? // Descrição opcional
+
+  // Configurações de tema
+  primaryColor    String @default("#3b82f6") // Cor primária
+  secondaryColor  String @default("#8b5cf6") // Cor secundária
+  backgroundColor String @default("#ffffff") // Cor de fundo
+  textColor       String @default("#1f2937") // Cor do texto
+  accentColor     String @default("#10b981") // Cor de destaque
+
+  // Configurações de gráficos
+  chartType        String  @default("bar") // Tipo de gráfico padrão (bar, line, pie, area)
+  chartColors      String // JSON array de cores para gráficos
+  showLegend       Boolean @default(true)
+  showGrid         Boolean @default(true)
+  animationEnabled Boolean @default(true)
+
+  // Senhas (hash)
+  userPassword  String? // Hash da senha de usuário comum (opcional)
+  adminPassword String // Hash da senha de administrador (obrigatória, mais segura)
+
+  // Metadados
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  createdBy String? // ID do criador (opcional)
+
+  // Relacionamentos
+  customQuestions CustomQuestion[]
+  surveyResponses CustomSurveyResponse[]
+
+  @@map("survey_configs")
+}
+
+// Modelo para perguntas customizadas
+model CustomQuestion {
+  id        Int      @id @default(autoincrement())
+  configId  String // ID da configuração
+  text      String // Texto da pergunta
+  category  String // Categoria
+  order     Int // Ordem de exibição
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relacionamento
+  config    SurveyConfig             @relation(fields: [configId], references: [id], onDelete: Cascade)
+  responses CustomQuestionResponse[]
+
+  @@unique([configId, order])
+  @@map("custom_questions")
+}
+
+// Modelo para respostas de pesquisa customizada
+model CustomSurveyResponse {
+  id          String   @id @default(cuid())
+  configId    String // ID da configuração customizada
+  userId      String
+  totalScore  Int
+  completedAt DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relacionamento
+  config            SurveyConfig             @relation(fields: [configId], references: [id], onDelete: Cascade)
+  user              User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  questionResponses CustomQuestionResponse[]
+
+  @@map("custom_survey_responses")
+}
+
+// Modelo para respostas de perguntas customizadas
+model CustomQuestionResponse {
+  id               String @id @default(cuid())
+  surveyResponseId String
+  questionId       Int
+  score            Int // 0, 1, 2, ou 3
+
+  // Relacionamentos
+  surveyResponse CustomSurveyResponse @relation(fields: [surveyResponseId], references: [id], onDelete: Cascade)
+  question       CustomQuestion       @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@unique([surveyResponseId, questionId])
+  @@map("custom_question_responses")
 }
